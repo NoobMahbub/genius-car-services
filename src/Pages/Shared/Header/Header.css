@@ -1,0 +1,9 @@
+.navbar-light .navbar-brand {
+    color: #d70f64 !important;
+
+}
+
+.header {
+    box-shadow: var(--box-shadow);
+    font-weight: 600;
+}
