@@ -14,10 +14,14 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",
     "react-dom": "^18.2.0",
+    "react-firebase-hooks": "^5.0.3",
     "react-helmet": "^6.1.0",
+    "react-icons": "^4.6.0",
     "react-router-dom": "^6.4.2",
     "react-scripts": "5.0.1",
+    "react-toastify": "^9.1.1",
     "rive-react": "^3.0.32",
+    "toastify": "^2.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

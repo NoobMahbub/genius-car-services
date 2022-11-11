@@ -8,6 +8,8 @@ import ServiceDetail from './Pages/ServiceDetail/ServiceDetail';
 import NotFound from './Pages/Shared/NotFound/NotFound';
 import Login from './Pages/Login/Login/Login';
 import Register from './Pages/Login/Register/Register';
+import ResetPassword from './Components/ResetPassword/ResetPassword';
+import { ToastContainer } from 'react-toastify';
 function App() {
   return (
     <div>
@@ -19,9 +21,11 @@ function App() {
         <Route path="/about" element={<About></About>} />
         <Route path="/login" element={<Login></Login>} />
         <Route path="/register" element={<Register></Register>} />
+        <Route path="/reset" element={<ResetPassword></ResetPassword>} />
         <Route path="*" element={<NotFound></NotFound>} />
       </Routes>
       <Footer></Footer>
+      <ToastContainer/>
     </div>
 
   );

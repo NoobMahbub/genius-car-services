@@ -1,14 +1,23 @@
 import React from 'react';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { Link, useNavigate } from 'react-router-dom';
 import CustomLink from '../../../Components/CustomLink/CustomLink';
+import auth from '../../../firebase.init';
 import './Header.css';
 const Header = () => {
+  const navigate = useNavigate();
+  const [user] = useAuthState(auth);
+  const handleSignOut = () => {
+    auth.signOut();
+    navigate('/login');
+  };
+  
     return (
         <>
      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand as={Link} to="/"><img src="https://raw.githubusercontent.com/ProgrammingHero1/batch5-genius-car-service-module-60/main/src/images/logo.png" height={30} alt="" srcset="" /></Navbar.Brand>
+        <Navbar.Brand as={Link} to="/"><img src="https://raw.githubusercontent.com/ProgrammingHero1/batch5-genius-car-service-module-60/main/src/images/logo.png" height={30} alt="" srcSet="" /></Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
@@ -28,9 +37,13 @@ const Header = () => {
           </Nav>
           <Nav>
             <Nav.Link as={Link} to = "/about">About</Nav.Link>
+           {
+            user ?
+           <button onClick={handleSignOut}>Sign Out</button> :
             <Nav.Link eventKey={2} as={Link} to="/login">
               Login
             </Nav.Link>
+           }
           </Nav>
         </Navbar.Collapse>
       </Container>

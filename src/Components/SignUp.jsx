@@ -2,31 +2,60 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import {Link} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useRive, useStateMachineInput } from 'rive-react';
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
+import { useCreateUserWithEmailAndPassword, useUpdateProfile } from 'react-firebase-hooks/auth';
+import auth from '../firebase.init';
+import SocialLogin from '../Pages/Login/SocialLogin/SocialLogin';
+import { toast } from 'react-toastify';
 
 const theme = createTheme();
 
 const STATE_MACHINE_NAME = "State Machine 1";
 
-export default function Register({ checkLogin }) {
 
+let errorElement;
+
+export default function Register({ checkLogin }) {
+    const [updateProfile, updating, updateError] = useUpdateProfile(auth);
+
+    const [
+        createUserWithEmailAndPassword,
+        user,
+        loading,
+        error,
+    ] = useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState('');
+
 
     const { rive, RiveComponent } = useRive({
         src: "520-990-teddy-login-screen.riv",
         autoplay: true,
         stateMachines: STATE_MACHINE_NAME
     })
+
+    if (error) {
+
+        errorElement = 
+            <p className='text-danger'>Error: {error?.message}</p>
+       
+    }
+
+    const navigate = useNavigate();
+    if (user) {
+        navigate('/');
+        toast(<div>
+            <p className='text-success'>Registered Successfully</p>
+        </div>);
+    }
 
 
     useEffect(() => {
@@ -101,21 +130,21 @@ export default function Register({ checkLogin }) {
 
 
 
-    if (rive) {
-        console.log(rive.contents);
-    }
+    // if (rive) {
+    //     console.log(rive.contents);
+    // }
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        
-        // eslint-disable-next-line no-console
 
-        console.log("email " + email);
-        console.log("password " + password);
-        console.log("Confirm Password " + confirmPassword);
+        // eslint-disable-next-line no-console
+        createUserWithEmailAndPassword(email, password);
+        // console.log("email " + email);
+        // console.log("password " + password);
+        // console.log("Confirm Password " + confirmPassword);
 
     };
-    const emailRef = useRef('');
+
 
     return (
         <ThemeProvider theme={theme}>
@@ -135,7 +164,7 @@ export default function Register({ checkLogin }) {
                     </div>
 
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                        <form autoComplete="off">
+                        <div autoComplete="off">
                             <TextField
                                 onFocus={() => setHangUp(false)}
 
@@ -187,7 +216,8 @@ export default function Register({ checkLogin }) {
                                 id="confirmPassword"
                                 autoComplete="current-password"
                             />
-                        </form>
+                        </div>
+                        <div style={{ color: 'red' }}>{errorElement}</div>
                         <Button
                             onMouseOver={() => setHangUp(false)}
                             onFocus={() => setHangUp(false)}
@@ -207,7 +237,9 @@ export default function Register({ checkLogin }) {
                         >
                             Register
                         </Button>
-                        <p className='text-black'>Already Have an Account? <Link className='text-danger text-decoration-none'  to="/login">Login</Link></p>
+
+                        <p className='text-black'>Already Have an Account? <Link className='text-danger text-decoration-none' to="/login">Login</Link></p>
+                        <SocialLogin></SocialLogin>
                     </Box>
                 </Box>
                 {/*<Copyright sx={{ mt: 8, mb: 4 }} />*/}
