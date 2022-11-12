@@ -3,9 +3,7 @@ import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import { Link, useNavigate } from 'react-router-dom';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useRive, useStateMachineInput } from 'rive-react';
@@ -14,6 +12,9 @@ import { useCreateUserWithEmailAndPassword, useUpdateProfile } from 'react-fireb
 import auth from '../firebase.init';
 import SocialLogin from '../Pages/Login/SocialLogin/SocialLogin';
 import { toast } from 'react-toastify';
+import useLoading from './hooks/useLoading.jsx';
+import Skeleton from 'react-loading-skeleton';
+import { Avatar } from '@mui/material';
 
 const theme = createTheme();
 
@@ -24,13 +25,13 @@ let errorElement;
 
 export default function Register({ checkLogin }) {
     const [updateProfile, updating, updateError] = useUpdateProfile(auth);
-
     const [
         createUserWithEmailAndPassword,
         user,
         loading,
         error,
-    ] = useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
+      ] = useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -44,9 +45,9 @@ export default function Register({ checkLogin }) {
 
     if (error) {
 
-        errorElement = 
+        errorElement =
             <p className='text-danger'>Error: {error?.message}</p>
-       
+
     }
 
     const navigate = useNavigate();
@@ -144,9 +145,24 @@ export default function Register({ checkLogin }) {
         // console.log("Confirm Password " + confirmPassword);
 
     };
-
+    const [Loading] = useLoading();
 
     return (
+
+        Loading? <div className='container'>
+        
+        <center>
+        <Skeleton className='mt-3' variant="rounded" width={300} height={220}>
+        <Avatar />
+      </Skeleton>
+            <Skeleton className='m-5' variant="rectangular" width={400} height={500} />
+            <Skeleton className='mt-3' variant="rounded" width={300} height={50} />
+            <Skeleton className='mt-3' variant="rounded"  width={300} height={50}/>
+            
+        
+        </center>
+        </div> :
+
         <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="xs">
                 <CssBaseline />

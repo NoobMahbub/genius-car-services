@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import { Link, useNavigate } from 'react-router-dom';
-
+import { Avatar, Skeleton } from '@mui/material';
 import Box from '@mui/material/Box';
 
 import Container from '@mui/material/Container';
@@ -14,6 +14,7 @@ import { useSendPasswordResetEmail, useSignInWithEmailAndPassword } from 'react-
 import auth from '../firebase.init';
 import SocialLogin from '../Pages/Login/SocialLogin/SocialLogin';
 import { toast } from 'react-toastify';
+import useLoading from './hooks/useLoading';
 
 
 
@@ -24,7 +25,10 @@ const STATE_MACHINE_NAME = "State Machine 1";
 let errorElement;
 export default function SignIn({ checkLogin }) {
     const [
-        signInWithEmailAndPassword, user, error
+        signInWithEmailAndPassword,
+        user,
+        loading,
+        error,
     ] = useSignInWithEmailAndPassword(auth);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -42,7 +46,7 @@ export default function SignIn({ checkLogin }) {
     if (error) {
 
         errorElement =
-            <p className='text-danger'>Invalid email and password combination</p>
+            <p className='text-danger'>{error?.message}</p>
     }
 
     const navigate = useNavigate();
@@ -158,93 +162,107 @@ export default function SignIn({ checkLogin }) {
 
     };
 
-
+    const [Loading] = useLoading();
     return (
-        <ThemeProvider theme={theme}>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <Box
-                    sx={{
-                        marginTop: 8,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-                    <div >
-                        <RiveComponent
-                            style={{ width: '300px', height: '300px' }} src="520-990-teddy-login-screen.riv" />
-                    </div>
+        Loading ? <div className='container'>
 
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                        <div autoComplete="off">
-                            <TextField
-                                onFocus={() => setHangUp(false)}
+            <center>
+                <Skeleton className='mt-3' variant="rounded" width={300} height={220}>
+                    <Avatar />
+                </Skeleton>
+                <Skeleton className='m-5' variant="rectangular" width={400} height={500} />
+                <Skeleton className='mt-3' variant="rounded" width={300} height={50} />
+                <Skeleton className='mt-3' variant="rounded" width={300} height={50} />
 
-                                onChange={(event) => setEmail(event.target.value)}
-                                value={email}
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="email"
-                                autoFocus
 
-                            />
-                            <TextField
-                                onChange={(event) => {
-                                    setHangUp(true);
-                                    setPassword(event.target.value);
-                                    //setHangUp(false);
-                                }}
-                                //onFocus={() => setHangUp(true)}
-                                //onE
-                                value={password}
-                                margin="normal"
-                                required
-                                fullWidth
-                                name="password"
-                                label="Password"
-                                type="password"
-                                id="password"
-                                autoComplete="current-password"
-                            />
+            </center>
+        </div>
+            :
+            <ThemeProvider theme={theme}>
+                <Container component="main" maxWidth="xs">
+                    <CssBaseline />
+                    <Box
+                        sx={{
+                            marginTop: 8,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <div >
+                            <RiveComponent
+                                style={{ width: '300px', height: '300px' }} src="520-990-teddy-login-screen.riv" />
                         </div>
 
-                        <div style={{ color: 'red' }}>{errorElement}</div>
-                        <Button
-                            onMouseOver={() => setHangUp(false)}
-                            onFocus={() => setHangUp(false)}
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            onClick={() => {
+                        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                            <div autoComplete="off">
+                                <TextField
+                                    onFocus={() => setHangUp(false)}
 
-                                setCheck(true);
-                                if (checkLogin(email, password)) {
-                                    triggerSuccess();
-                                } else {
-                                    triggerFail();
-                                }
+                                    onChange={(event) => setEmail(event.target.value)}
+                                    value={email}
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    id="email"
+                                    label="Email Address"
+                                    name="email"
+                                    autoComplete="email"
+                                    autoFocus
 
-                            }}
-                            sx={{ mt: 3, mb: 2 }}
-                        >
-                            Login
-                        </Button>
+                                />
+                                <TextField
+                                    onChange={(event) => {
+                                        setHangUp(true);
+                                        setPassword(event.target.value);
+                                        //setHangUp(false);
+                                    }}
+                                    //onFocus={() => setHangUp(true)}
+                                    //onE
+                                    value={password}
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    id="password"
+                                    autoComplete="current-password"
+                                />
+                            </div>
+
+                            <div style={{ color: 'red' }}>{errorElement}</div>
+                            <Button
+                                onMouseOver={() => setHangUp(false)}
+                                onFocus={() => setHangUp(false)}
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                onClick={() => {
+
+                                    setCheck(true);
+                                    if (checkLogin(email, password)) {
+                                        triggerSuccess();
+                                    } else {
+                                        triggerFail();
+                                    }
+
+                                }}
+                                sx={{ mt: 3, mb: 2 }}
+                            >
+                                Login
+                            </Button>
 
 
 
 
+                        </Box>
                     </Box>
-                </Box>
-                <p className='text-black'>New to The Car Doctor? <Link className='text-primary text-decoration-none' to="/register">Create an Account</Link></p>
-                <p className='text-black'>Forgotten password?<Link className='btn btn-link text-danger text-decoration-none' to="/reset">Reset Password</Link></p>
-                <SocialLogin></SocialLogin>
-                {/*<Copyright sx={{ mt: 8, mb: 4 }} />*/}
-            </Container>
-        </ThemeProvider>
+                    <p className='text-black'>New to The Car Doctor? <Link className='text-primary text-decoration-none' to="/register">Create an Account</Link></p>
+                    <p className='text-black'>Forgotten password?<Link className='btn btn-link text-danger text-decoration-none' to="/reset">Reset Password</Link></p>
+                    <SocialLogin></SocialLogin>
+                    {/*<Copyright sx={{ mt: 8, mb: 4 }} />*/}
+                </Container>
+            </ThemeProvider>
     );
 }

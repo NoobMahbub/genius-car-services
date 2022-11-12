@@ -5,22 +5,23 @@ import { useSignInWithGithub, useSignInWithGoogle } from 'react-firebase-hooks/a
 import auth from '../../../firebase.init';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useState } from 'react';
-
 const SocialLogin = () => {
-  const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
-  const [signInWithGithub, user1, loading1, error1] = useSignInWithGithub(auth);
+  const [signInWithGoogle, user,loading, error2] = useSignInWithGoogle(auth);
+  const [signInWithGithub, user1,loading1, error1] = useSignInWithGithub(auth);
   const navigate = useNavigate();
 
 
 
   if (user || user1) {
     navigate('/');
+    toast(<div>
+      <p className='text-success'>Logged in successfully</p>
+    </div>);
   }
-  if (error || error1) {
+  if (error2 || error1) {
 
-    toast(<p className='text-danger'>Error: {error?.message} {error1?.message}</p>);
-  
+    toast(<p className='text-danger'>Error: {error2?.message} {error1?.message}</p>);
+
   }
 
   return (

@@ -1,9 +1,11 @@
+import { Skeleton } from '@mui/material';
 import React from 'react';
 import { useState } from 'react';
 import { Carousel } from 'react-bootstrap';
+// import Loading from '../Components/hooks/useLoading';
 import './Banner.css';
-
-
+import useLoading from '../../../Components/hooks/useLoading';
+// import SkeletonLoading from '../../../../Components/SkeletonLoading/SkeletonLoading.jsx';
 
 
 const Banner = () => {
@@ -12,7 +14,9 @@ const Banner = () => {
     const handleSelect = (selectedIndex, e) => {
         setIndex(selectedIndex);
     };
-    return (
+const [Loading] = useLoading();
+    return ( 
+Loading? <Skeleton/> :
         <Carousel activeIndex={index} onSelect={handleSelect}>
             <Carousel.Item>
                 <img
@@ -48,10 +52,13 @@ const Banner = () => {
                     <h3>Third slide label</h3>
                     <p>
                         Praesent commodo cursus magna, vel scelerisque nisl consectetur.
+
                     </p>
+
                 </Carousel.Caption>
             </Carousel.Item>
         </Carousel>
+
     );
 };
 

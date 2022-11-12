@@ -1,9 +1,38 @@
-.navbar-light .navbar-brand {
-    color: #d70f64 !important;
 
-}
 
 .header {
     box-shadow: var(--box-shadow);
     font-weight: 600;
 }
+
+.navbar-nav a {
+    display: inline-block;
+    position: relative;
+    color: #ffffff;
+
+  }
+  .dropdown-menu{
+    background: #202c45;
+  }
+  .navbar-nav a:hover{
+    color: red;
+  }
+  
+  .navbar-nav a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: red;
+    
+    transform-origin: bottom right;
+    transition: transform 0.25s ease-out;
+  }
+  
+  .navbar-nav a:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+  }

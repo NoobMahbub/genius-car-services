@@ -1,5 +1,5 @@
 import { sendPasswordResetEmail } from 'firebase/auth';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth';
 import { Link, useNavigate } from 'react-router-dom';
@@ -8,40 +8,35 @@ import auth from '../../firebase.init';
 import 'react-toastify/dist/ReactToastify.css';
 const ResetPassword = () => {
   const [email, setEmail] = useState('');
-  const  [sendPasswordResetEmail, sending, error] =  useSendPasswordResetEmail(auth);
+  const [sendPasswordResetEmail, sending, error] = useSendPasswordResetEmail(
+    auth
+  );
   const navigate = useNavigate();
 
+useEffect(() => {
+  if (error) {
+
+    <div>
+      {toast(<p className='text-danger'>Error: {error.message}</p>)}
+    </div>
+  }
+  else if(email){
+    toast("Sent email");
+  }
+ 
+},[error]);
 
 
 
-  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const success = await sendPasswordResetEmail(email);
-    if (success) {
-      toast("Sent email");
-    }
-
-
-    else if (email === '') {
-
-      toast("Please enter email");
-
-
-    }
-    else if(error){
-
-      <div>
-        {toast(<p className='text-danger'>Error: {error.message}</p>)}
-      </div>
-    }
-    else {
-      toast("Sent mail");
+    sendPasswordResetEmail(email);
+    if(sending){
+      console.log("sent");
     }
   
-    
   }
 
   return (
