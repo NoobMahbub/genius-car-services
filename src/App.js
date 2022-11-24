@@ -10,6 +10,10 @@ import Login from './Pages/Login/Login/Login';
 import Register from './Pages/Login/Register/Register';
 import ResetPassword from './Components/ResetPassword/ResetPassword';
 import { ToastContainer } from 'react-toastify';
+import AddService from './Pages/Home/Home/AddService/AddService';
+import ManageServices from './Pages/Home/Home/ManageServices/ManageServices';
+import RequireAuth from './Components/RequireAuth/RequireAuth';
+// import PrivateRoute from './Components/PrivateRoute/PrivateRoute';
 function App() {
   return (
     <div>
@@ -22,10 +26,13 @@ function App() {
         <Route path="/login" element={<Login></Login>} />
         <Route path="/register" element={<Register></Register>} />
         <Route path="/reset" element={<ResetPassword></ResetPassword>} />
+        <Route path="/addservice" element={<RequireAuth><AddService></AddService></RequireAuth>} />
+        <Route path="/manage" element={<RequireAuth><ManageServices></ManageServices></RequireAuth>} />
         <Route path="*" element={<NotFound></NotFound>} />
+        {/* <RequireAuth path="/manage/" component={ManageServices} /> */}
       </Routes>
       <Footer></Footer>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
 
   );
